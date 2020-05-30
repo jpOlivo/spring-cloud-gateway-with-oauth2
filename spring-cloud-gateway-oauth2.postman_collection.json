@@ -1,0 +1,182 @@
+{
+	"info": {
+		"_postman_id": "5e0f9c3e-2b20-4522-8e6c-dce3e3015e9b",
+		"name": "spring-cloud-gateway-oauth2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "resource (without token)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "250243e0-1ab0-4c56-a6a9-a6f8f2e8006a",
+						"exec": [
+							"pm.test(\"Status test\", function () {",
+							"    pm.response.to.have.status(401);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9000/resource",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"resource"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "resource (with explicit token)",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJraWQiOiJGLUhHR1YwekhWaTVSRGVvQlJrS1dIM2NuLUgxRVRjN1Y5OHI4ZGh2TF9RIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULnN1djdaZFVpOGhBbnFpOUVfVkMweXNxTldCQ2dpZEtjN1FvNE5vU0o0ZDgiLCJpc3MiOiJodHRwczovL2Rldi0zMDUxNzUub2t0YS5jb20vb2F1dGgyL2RlZmF1bHQiLCJhdWQiOiJhcGk6Ly9kZWZhdWx0IiwiaWF0IjoxNTkwNTk1MTY5LCJleHAiOjE1OTA1OTU0NjksImNpZCI6IjBvYWJ5am56bjhzZWdTYzJPNHg2IiwidWlkIjoiMDB1YnlqbnJ4TXN4Y0ZUeEs0eDYiLCJzY3AiOlsib3BlbmlkIl0sInN1YiI6Imp1YW0xN0BnbWFpbC5jb20ifQ.BbsZhSEuufvXywRe5XGaL8_GLbKj5c19vIkZG7Zyvje8nDFM_O09dEC0lfH4KdfXFPTkMxKdMcinlJeHvK9zBEiGL8NM6JuuSLyyhfsjC9hpFrE1SAJCLiMF5puR4FA3l3Je8b9OCGQMiDNWkfYdumZO8dnWOozLPxqlWrwHyY1ejLWZMn64Xe3xucGAFo6FRmVzJp9O2ztZGQgX95OuYp1EC42RgMnq4E8IOS1WBJevG7fzpoHMmElEF0LOQ1-bhFkQDD5Zt8_nWktoXXYSA5tS5vGO1s3upv35-m5WtP1TJMSqIWicq2LIAgHFvg_H2gzmAZw1RE-aX9x9oXe3Yw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9000/resource",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"resource"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "resource behind gw",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b5bccbee-8bab-4933-a1f0-7c1b3397ea2b",
+						"exec": [
+							"pm.test(\"Status test\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Host",
+						"type": "text",
+						"value": "core.nx.com"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/service/resource",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"service",
+						"resource"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "actuator (gw)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5d0d31f6-c994-4196-9d60-3387b3d9b56e",
+						"exec": [
+							"pm.test(\"Status test\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Host",
+						"value": "localhost",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/actuator",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"actuator"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "755eda9c-1d4e-4d93-89f2-7da1bd73417a",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "39319448-ac1c-44e3-923b-a841c9d116be",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

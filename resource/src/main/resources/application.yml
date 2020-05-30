@@ -1,0 +1,16 @@
+server:
+  port: 9000
+
+spring:
+  application:
+    name: resource
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: https://{yourOktaDomain}/oauth2/default/v1/keys
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG

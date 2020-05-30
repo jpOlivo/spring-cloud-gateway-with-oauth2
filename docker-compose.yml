@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  gateway:
+    build: ./gateway
+    ports:
+    - 8080:8080
+    depends_on: 
+    - resource
+  resource:
+    build: ./resource
+    ports:
+    - 9000:9000

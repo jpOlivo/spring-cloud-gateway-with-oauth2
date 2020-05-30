@@ -1,0 +1,74 @@
+server:
+  port: 8080
+  
+spring:
+  application:
+    name: gateway
+  security:
+    oauth2:
+      client:
+        registration:
+          gateway-password:
+            provider: okta
+            client-id: {yourClientId}
+            client-secret: {yourSecret}
+            authorization-grant-type: password
+            scope: openid
+          gateway-client-creds:
+            provider: okta
+            client-id: {yourClientId}
+            client-secret: {yourSecret}
+            authorization-grant-type: client_credentials  
+            scope: my_scope
+        provider:
+          okta:
+            token-uri: https://{yourOktaDomain}/oauth2/default/v1/token
+  cloud:
+    gateway:
+      routes:
+      - id: resource
+        uri: http://resource:9000/**
+        predicates:
+          - Host=**.nx.com
+          - Method=GET,POST
+          - Path=/service/**
+        filters:
+          - StripPrefix=1
+          - RemoveRequestHeader=Cookie
+          - name: Retry
+            args:
+              retries: 5
+              series: SERVER_ERROR
+              methods: GET,POST
+              backoff:
+                firstBackoff: 10ms
+                maxBackoff: 50ms
+                factor: 2
+                basedOnPreviousValue: false
+#      httpserver:
+#        wiretap: true
+#      httpclient:
+#        wiretap: true
+
+
+client-registration-id: gateway-client-creds
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: TRACE
+    org.springframework.web.HttpLogging: TRACE
+    org.springframework.security: TRACE
+    org.springframework.security.oauth2: TRACE
+    org.springframework.cloud.gateway: TRACE
+    
+  
+# actuator-related configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always            
